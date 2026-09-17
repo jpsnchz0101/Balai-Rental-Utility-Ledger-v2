@@ -75,9 +75,25 @@ export default function App() {
     localStorage.setItem('balai_user_profile', JSON.stringify(profile));
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    const token = localStorage.getItem('balai_auth_token');
+    if (token) {
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      } catch {
+        // Backend optional
+      }
+    }
     setIsAuthenticated(false);
     localStorage.removeItem('balai_auth_session');
+    localStorage.removeItem('balai_auth_token');
+    localStorage.removeItem('balai_user_profile');
   };
 
   // Application Data States

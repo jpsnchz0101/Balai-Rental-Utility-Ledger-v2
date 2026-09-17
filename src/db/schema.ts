@@ -2,6 +2,7 @@ import { pgTable, serial, text, integer, real, timestamp } from 'drizzle-orm/pg-
 
 export const settingsTable = pgTable('settings', {
   id: serial('id').primaryKey(),
+  userId: text('user_id').default('usr_default'),
   propertyName: text('property_name').notNull().default(''),
   landlordName: text('landlord_name').notNull().default(''),
   address: text('address').notNull().default(''),
@@ -17,6 +18,7 @@ export const settingsTable = pgTable('settings', {
 
 export const roomsTable = pgTable('rooms', {
   id: serial('id').primaryKey(),
+  userId: text('user_id').default('usr_default'),
   roomId: text('room_id').notNull().unique(),
   roomNumber: text('room_number').notNull(),
   floor: integer('floor').notNull().default(1),
@@ -38,6 +40,7 @@ export const roomsTable = pgTable('rooms', {
 
 export const paymentsTable = pgTable('payments', {
   id: serial('id').primaryKey(),
+  userId: text('user_id').default('usr_default'),
   paymentId: text('payment_id').notNull().unique(),
   roomId: text('room_id').notNull(),
   tenantName: text('tenant_name').notNull(),
@@ -51,6 +54,7 @@ export const paymentsTable = pgTable('payments', {
 
 export const expensesTable = pgTable('expenses', {
   id: serial('id').primaryKey(),
+  userId: text('user_id').default('usr_default'),
   expenseId: text('expense_id').notNull().unique(),
   title: text('title').notNull(),
   category: text('category').notNull(), // Maintenance, Utilities, Repairs, Supplies, Admin, Other

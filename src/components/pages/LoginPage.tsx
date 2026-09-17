@@ -56,7 +56,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
     setRegUsername(generated);
   };
 
-  const handleLogin = (e?: React.FormEvent) => {
+  const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (isLoading) return;
     setErrorMsg('');
@@ -74,9 +74,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      const result = await authService.validateLogin(identifier, password);
       setIsLoading(false);
-      const result = authService.validateLogin(identifier, password);
 
       if (result.success && result.user) {
         onLoginSuccess({
@@ -85,9 +85,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           name: result.user.name,
         });
       } else {
-        setErrorMsg(result.error || 'Invalid credentials.');
+        setErrorMsg(result.error || 'Invalid credentials. Please verify and try again.');
       }
-    }, 450);
+    } catch {
+      setIsLoading(false);
+      setErrorMsg('Unable to connect to authentication service.');
+    }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
